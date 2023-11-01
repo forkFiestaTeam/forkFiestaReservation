@@ -1,6 +1,6 @@
 class Reservation():
 
-    def __init__(self,id,reservation_name,date,hour,guest_number,event_type=None) -> None:
+    def __init__(self,id,reservation_name,date,hour,guest_number,event_type) -> None:
         self.id=id
         self.reservation_name=reservation_name
         self.date=date

@@ -1,5 +1,5 @@
 import json
-from datetime import time
+from datetime import time, datetime
 from database.db import get_connection
 from .entities.Reservation import Reservation
 
@@ -31,11 +31,16 @@ class ReservationModel():
     def add_reservation(cls, reservation):
         try:
             connection = get_connection()
-
+            print(reservation.reservation_name)
+            print(reservation.date)
+            print(reservation.hour)
+            print(reservation.guest_number)
+            print(reservation.event_type)
             with connection.cursor() as cursor:
-                cursor.execute("""INSERT INTO reservation (reservation_name, date, hour, guest_number, event_type) 
-                            VALUES (%s, %s, %s, %s, %s)""", (reservation.reservation_name, reservation.date, 
-                            reservation.hour, reservation.guest_number, reservation.event_type))
+                cursor.execute(f"""INSERT INTO reservation (reservation_name, date, hour, guest_number, event_type) 
+                            VALUES ('{reservation.reservation_name}', '{reservation.date}', '{reservation.hour}', {reservation.guest_number}, '{reservation.event_type}')""",
+                            )
+
                 affected_rows = cursor.rowcount
                 connection.commit()
 
@@ -43,15 +48,15 @@ class ReservationModel():
             return affected_rows
         except Exception as ex:
             raise Exception(ex)
-    
     @classmethod
     def update_reservation(self, reservation):
         try:
             connection = get_connection()
+            print(reservation.id)
 
             with connection.cursor() as cursor:
-                cursor.execute("""UPDATE reservation SET reservation_name = %s, date = %s, hour = %s, guest_number = %s, event_type = %s 
-                                WHERE id = %s""", (reservation.reservation_name, reservation.date, reservation.hour, reservation.guest_number, reservation.event_type))
+                cursor.execute(f"""UPDATE reservation SET reservation_name = '{reservation.reservation_name}', date ='{reservation.date}', hour ='{reservation.hour}' , guest_number = {reservation.guest_number}, event_type = '{reservation.event_type}' 
+                                WHERE id = {reservation.id}""")
                 affected_rows = cursor.rowcount
                 connection.commit()
 
