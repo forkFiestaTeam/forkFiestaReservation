@@ -63,3 +63,47 @@ def update_reservation(id):
 
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
+
+@main.route('/delete/<int:id>', methods=['DELETE'])
+def delete_reservation(id):
+    try:
+        affected_rows = ReservationModel.delete_reservation(id)
+        if affected_rows == 1:
+            return jsonify({'message': 'Reservation deleted successfully'})
+        else:
+            return jsonify({'message': 'Reservation not found'}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+    
+@main.route('/<int:id>')
+def get_reservation_by_id(id):
+    try:
+        reservation = ReservationModel.get_reservation_by_id(id)
+        if reservation:
+            return jsonify(reservation)
+        else:
+            return jsonify({'message': 'Reservation not found'}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+
+@main.route('/<string:date>')
+def get_reservation_by_date(date):
+    try:
+        reservation = ReservationModel.get_reservation_by_date(date)
+        if reservation:
+            return jsonify(reservation)
+        else:
+            return jsonify({'message': 'Reservation not found'}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+    
+@main.route('/<string:date>/<string:hour>')
+def get_reservation_by_hour(date, hour):
+    try:
+        reservation = ReservationModel.get_reservation_by_hour(date, hour)
+        if reservation:
+            return jsonify(reservation)
+        else:
+            return jsonify({'message': 'Reservation not found'}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
