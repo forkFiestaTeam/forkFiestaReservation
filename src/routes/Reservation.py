@@ -87,6 +87,16 @@ def get_reservation_by_id(id):
             return jsonify({'message': 'Reservation not found'}), 404
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
+@main.route('getbyuid/<string:uid>')
+def get_reservation_by_uid(uid):
+    try:
+        reservations = ReservationModel.get_reservation_by_uid(uid)
+        if reservations:
+            return jsonify(reservations)
+        else:
+            return jsonify({'message': 'Reservation not found'}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
 
 @main.route('/<string:date>')
 def get_reservation_by_date(date):
