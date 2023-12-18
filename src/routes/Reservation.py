@@ -21,12 +21,13 @@ def add_reservation():
     try:
         data = request.json
         reservation_name = data['reservation_name']
+        uid = data['uid']
         date = data['date']
         hour = data['hour']
         guest_number = data['guest_number']
         event_type = data['event_type']
         # Create an instance of Reservation with the parsed data
-        reservation = Reservation(0,reservation_name, date, hour, guest_number, event_type)
+        reservation = Reservation(0,reservation_name,uid, date, hour, guest_number, event_type)
 
         # Call the function to add the reservation in your model
         affected_rows = ReservationModel.add_reservation(reservation)
@@ -43,14 +44,15 @@ def add_reservation():
 def update_reservation(id):
     try:
         data = request.json
-        if 'reservation_name' in data and 'date' in data and 'hour' in data and 'guest_number' in data and 'event_type' in data:
+        if 'reservation_name' in data and 'uid' in data and'date' in data and 'hour' in data and 'guest_number' in data and 'event_type' in data:
             reservation_name = data['reservation_name']
+            uid = data['uid']
             date = data['date']
             hour = data['hour']
             guest_number = data['guest_number']
             event_type = data['event_type']
 
-            reservation = Reservation(id, reservation_name, date, hour, guest_number, event_type)
+            reservation = Reservation(id, reservation_name,uid, date, hour, guest_number, event_type)
 
             affected_rows = ReservationModel.update_reservation(reservation)
 
