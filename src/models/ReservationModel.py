@@ -64,3 +64,85 @@ class ReservationModel():
             return affected_rows
         except Exception as ex:
             raise Exception(ex)
+    
+    @classmethod
+    def delete_reservation(self, id):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute(f"""DELETE FROM reservation WHERE id = {id}""")
+                affected_rows = cursor.rowcount
+                connection.commit()
+
+            connection.close()
+            return affected_rows
+        except Exception as ex:
+            raise Exception(ex)
+    
+    @classmethod
+    def get_reservation_by_id(self, id):
+        try:
+            connection=get_connection() 
+            reservations=[]
+
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT id, reservation_name, date, hour, guest_number, event_type FROM reservation WHERE id = {id}")
+                resultset=cursor.fetchall()
+                
+                for row in resultset:
+                    date_str = row[2].strftime('%Y-%m-%d')
+                    hour_str = row[3].strftime('%H:%M:%S')
+                    reservation = Reservation(row[0],row[1], date_str, hour_str, row[4], row[5])
+                    reservations.append(reservation.to_JSON())
+                    
+            connection.close()
+            return reservations
+        
+        except Exception as ex:
+            raise Exception(ex)
+        
+    @classmethod
+    def get_reservation_by_date(self, date):
+        try:
+            connection=get_connection() 
+            reservations=[]
+
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT id, reservation_name, date, hour, guest_number, event_type FROM reservation WHERE date = '{date}'")
+                resultset=cursor.fetchall()
+                
+                for row in resultset:
+                    date_str = row[2].strftime('%Y-%m-%d')
+                    hour_str = row[3].strftime('%H:%M:%S')
+                    reservation = Reservation(row[0],row[1], date_str, hour_str, row[4], row[5])
+                    reservations.append(reservation.to_JSON())
+                    
+            connection.close()
+            return reservations
+        
+        except Exception as ex:
+            raise Exception(ex)
+    
+    @classmethod
+    def get_reservation_by_hour(self,date, hour):
+        try:
+            connection=get_connection() 
+            reservations=[]
+
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT id, reservation_name, date, hour, guest_number, event_type FROM reservation WHERE hour = '{hour}' and date = '{date}'")
+                resultset=cursor.fetchall()
+                
+                for row in resultset:
+                    date_str = row[2].strftime('%Y-%m-%d')
+                    hour_str = row[3].strftime('%H:%M:%S')
+                    reservation = Reservation(row[0],row[1], date_str, hour_str, row[4], row[5])
+                    reservations.append(reservation.to_JSON())
+                    
+            connection.close()
+            return reservations
+        
+        except Exception as ex:
+            raise Exception(ex)
+    
+
