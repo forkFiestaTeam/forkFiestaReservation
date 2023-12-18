@@ -145,5 +145,25 @@ class ReservationModel():
         
         except Exception as ex:
             raise Exception(ex)
-    
+    @classmethod
+    def get_reservation_by_uid(self, uid):
+        try:
+            connection=get_connection() 
+            reservations=[]
+
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT id, reservation_name,uid, date, hour, guest_number, event_type FROM reservation WHERE uid = '{uid}'")
+                resultset=cursor.fetchall()
+                
+                for row in resultset:
+                    date_str = row[3].strftime('%Y-%m-%d')
+                    hour_str = row[4].strftime('%H:%M:%S')
+                    reservation = Reservation(row[0],row[1],row[2], date_str, hour_str, row[5], row[6])
+                    reservations.append(reservation.to_JSON())
+                    
+            connection.close()
+            return reservations
+        
+        except Exception as ex:
+            raise Exception(ex)
 
